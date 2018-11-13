@@ -1,9 +1,5 @@
-with Ada.Unchecked_Conversion;
-
 package body AMPC is
    use type C.int;
-
-   function To_Result is new Ada.Unchecked_Conversion (Source => Values_Ptr, Target => Results_Ptr);
 
    function Parse (Input    : in String;
                    Parser   : in Parsers_Ptr;
