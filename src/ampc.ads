@@ -74,7 +74,7 @@ package AMPC is
    function Parse (Input    : in String;
                    Parser   : in Parsers_Ptr;
                    Result   : in Results_Ptr;
-                   Filename : in String := "<stdin>") return Results;
+                   Filename : in String := "<stdin>") return Boolean;
 
    function New_Parser (Name : in String) return Parsers_Ptr;
 
@@ -100,29 +100,28 @@ package AMPC is
    function Language (Flags    : in Language_Flags;
                       Grammar  : in String;
                       Parser_1 : in Parsers_Ptr;
-                      Parser_2 : in Parsers_Ptr) return Errors_Ptr with
-     Import        => True,
-     Convention    => C,
-     External_Name => "mpca_lang";
+                      Parser_2 : in Parsers_Ptr) return Errors_Ptr;
 
    function Language (Flags    : in Language_Flags;
                       Grammar  : in String;
                       Parser_1 : in Parsers_Ptr;
                       Parser_2 : in Parsers_Ptr;
-                      Parser_3 : in Parsers_Ptr) return Errors_Ptr with
-     Import        => True,
-     Convention    => C,
-     External_Name => "mpca_lang";
+                      Parser_3 : in Parsers_Ptr) return Errors_Ptr;
 
    function Language (Flags    : in Language_Flags;
                       Grammar  : in String;
                       Parser_1 : in Parsers_Ptr;
                       Parser_2 : in Parsers_Ptr;
                       Parser_3 : in Parsers_Ptr;
-                      Parser_4 : in Parsers_Ptr) return Errors_Ptr with
-     Import        => True,
-     Convention    => C,
-     External_Name => "mpca_lang";
+                      Parser_4 : in Parsers_Ptr) return Errors_Ptr;
+
+   function Language (Flags    : in Language_Flags;
+                      Grammar  : in String;
+                      Parser_1 : in Parsers_Ptr;
+                      Parser_2 : in Parsers_Ptr;
+                      Parser_3 : in Parsers_Ptr;
+                      Parser_4 : in Parsers_Ptr;
+                      Parser_5 : in Parsers_Ptr) return Errors_Ptr;
 
    --  AST - mpc_ast_t
    type ASTs is null record with

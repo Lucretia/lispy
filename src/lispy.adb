@@ -1,7 +1,7 @@
 with Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 --  with Ada.Characters.Latin_1;
-with Interfaces.C;
+with Interfaces.C.Strings;
 with Edit_Line;
 with AMPC;
 
@@ -9,6 +9,9 @@ procedure Lispy is
    package IO renames Ada.Text_IO;
    --  package L1 renames Ada.Characters.Latin_1;
    package C renames Interfaces.C;
+
+   use type AMPC.Errors_Ptr;
+   use type C.Strings.chars_ptr;
 
    Version_Number : constant String := "0.0.1";
 
@@ -45,16 +48,24 @@ procedure Lispy is
 
    procedure Handler (Dummy : in C.int) is
    begin
-      IO.New_Line;
-      IO.Put_Line ("Exiting Lispy...");
-
-      AMPC.Free (Number, Operator, Expression, Lispy);
-
       raise Finished;
    end Handler;
 
    function To_AST is new Ada.Unchecked_Conversion (Source => AMPC.Values_Ptr, Target => AMPC.AST_Ptr);
 begin
+   if Error /= null then
+      IO.Put_Line ("Failed to create parser.");
+
+      IO.Put_Line ("  >> Filename: " & C.Strings.Value (Error.Filename));
+      IO.Put_Line ("  >> Failure : " &
+        (if Error.Failure = C.Strings.Null_Ptr then "" else C.Strings.Value (Error.Failure)));
+      IO.Put_Line ("  >> Position: " & C.long'Image (Error.State.Position));
+      IO.Put_Line ("  >> At      : " & C.long'Image (Error.State.Row) & ", " & C.long'Image (Error.State.Column));
+      IO.Put_Line ("  >> Term    : " & C.int'Image (Error.State.Term));
+
+      return;
+   end if;
+
    Signal (Sig_Int, Handler'Access);
 
    IO.Put_Line ("Lispy version v" & Version_Number);
@@ -69,7 +80,9 @@ begin
          begin
             Edit_Line.Add_History (Input);
 
-            Success := AMPC.Parse (Input, Lispy, Result'Access);
+            --  Unrestricted_Access is a hack due to GNAT not accepting Access onm Unchecked_Unions, GNAT seems to think
+            --  there is no "aliased" keyword when there is.
+            Success := AMPC.Parse (Input, Lispy, Result'Unrestricted_Access);
 
             if Success then
                AMPC.Put (To_AST (Result.Output));
@@ -85,5 +98,8 @@ begin
       end loop REPL;
 exception
    when Finished =>
-      null;
+      IO.New_Line;
+      IO.Put_Line ("Exiting Lispy...");
+
+      AMPC.Free (Number, Operator, Expression, Lispy);
 end Lispy;
