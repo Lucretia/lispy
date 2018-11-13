@@ -52,17 +52,26 @@ procedure Lispy is
    end Handler;
 
    function To_AST is new Ada.Unchecked_Conversion (Source => AMPC.Values_Ptr, Target => AMPC.AST_Ptr);
+
+   function Check_Error (Error : in AMPC.Errors_Ptr) return Boolean is
+   begin
+      if Error /= null then
+         IO.Put_Line ("Failed to create parser.");
+
+         IO.Put_Line ("  >> Filename: " & C.Strings.Value (Error.Filename));
+         IO.Put_Line ("  >> Failure : " &
+         (if Error.Failure = C.Strings.Null_Ptr then "" else C.Strings.Value (Error.Failure)));
+         IO.Put_Line ("  >> Position: " & C.long'Image (Error.State.Position));
+         IO.Put_Line ("  >> At      : " & C.long'Image (Error.State.Row) & ", " & C.long'Image (Error.State.Column));
+         IO.Put_Line ("  >> Term    : " & C.int'Image (Error.State.Term));
+
+         return True; -- Exit Lispy.
+      end if;
+
+      return False;
+   end Check_Error;
 begin
-   if Error /= null then
-      IO.Put_Line ("Failed to create parser.");
-
-      IO.Put_Line ("  >> Filename: " & C.Strings.Value (Error.Filename));
-      IO.Put_Line ("  >> Failure : " &
-        (if Error.Failure = C.Strings.Null_Ptr then "" else C.Strings.Value (Error.Failure)));
-      IO.Put_Line ("  >> Position: " & C.long'Image (Error.State.Position));
-      IO.Put_Line ("  >> At      : " & C.long'Image (Error.State.Row) & ", " & C.long'Image (Error.State.Column));
-      IO.Put_Line ("  >> Term    : " & C.int'Image (Error.State.Term));
-
+   if Check_Error (Error) then
       return;
    end if;
 
