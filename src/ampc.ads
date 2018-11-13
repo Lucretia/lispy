@@ -92,10 +92,7 @@ package AMPC is
    type Language_Flags is (Default, Predictive, Whitespace_Sensitive) with
      Convention => C;
 
-   function Language (Flags : in Language_Flags; Grammar : in String; Parser : in Parsers_Ptr) return Errors_Ptr with
-     Import        => True,
-     Convention    => C,
-     External_Name => "mpca_lang";
+   function Language (Flags : in Language_Flags; Grammar : in String; Parser : in Parsers_Ptr) return Errors_Ptr;
 
    function Language (Flags    : in Language_Flags;
                       Grammar  : in String;

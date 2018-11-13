@@ -89,6 +89,24 @@ package body AMPC is
       Cleanup (4, Parser_1, Parser_2, Parser_3, Parser_4);
    end Free;
 
+   function Language (Flags   : in Language_Flags;
+                      Grammar : in String;
+                      Parser  : in Parsers_Ptr) return Errors_Ptr is
+      function Language (Flags   : in Language_Flags;
+                         Grammar : in C.Strings.chars_ptr;
+                         Parser  : in Parsers_Ptr) return Errors_Ptr with
+      Import        => True,
+      Convention    => C,
+      External_Name => "helper_language2";
+
+      C_Grammar : C.Strings.chars_ptr := C.Strings.New_String (Grammar);
+      Result    : Errors_Ptr          := Language (Flags, C_Grammar, Parser);
+   begin
+      C.Strings.Free (C_Grammar);
+
+      return Result;
+   end Language;
+
    function Language (Flags    : in Language_Flags;
                       Grammar  : in String;
                       Parser_1 : in Parsers_Ptr;
