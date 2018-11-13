@@ -60,7 +60,7 @@ procedure Lispy is
 
          IO.Put_Line ("  >> Filename: " & C.Strings.Value (Error.Filename));
          IO.Put_Line ("  >> Failure : " &
-         (if Error.Failure = C.Strings.Null_Ptr then "" else C.Strings.Value (Error.Failure)));
+           (if Error.Failure = C.Strings.Null_Ptr then "" else C.Strings.Value (Error.Failure)));
          IO.Put_Line ("  >> Position: " & C.long'Image (Error.State.Position));
          IO.Put_Line ("  >> At      : " & C.long'Image (Error.State.Row) & ", " & C.long'Image (Error.State.Column));
          IO.Put_Line ("  >> Term    : " & C.int'Image (Error.State.Term));
