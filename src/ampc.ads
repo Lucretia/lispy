@@ -29,7 +29,7 @@ package AMPC is
    end record with
      Convention => C;
 
-   type Errors_Ptr is access Errors with
+   type Errors_Ptr is access all Errors with
      Convention => C;
 
    procedure Put (Error : in Errors_Ptr) with
