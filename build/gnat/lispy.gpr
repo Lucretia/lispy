@@ -8,7 +8,7 @@ project LISPY is
    --  Build : Build_Type := external ("LISPY_BUILD", "linux");
 
    package Compiler is
-      C_Switches   := ("-ffunction-sections", "-fdata-sections", "-fpic", "-Werror", "-Wall");
+      C_Switches   := ("-ffunction-sections", "-fdata-sections", "-fpic", "-Werror", "-Wall", "-std=c99");
       Ada_Switches := ("-ffunction-sections", "-fdata-sections", "-fpic",
                        "-gnat2012", "-gnata", "-gnato", "-gnatE",
                        "-gnaty", "-gnaty-s", "-gnatyO", "-gnatyM120", "-gnatyO",
