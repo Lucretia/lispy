@@ -14,7 +14,7 @@ package AMPC is
    end record with
      Convention => C;
 
-   type States_Ptr is access States with
+   type States_Ptr is access all States with
      Convention => C;
 
    --  Errors - mpc_err_t
@@ -46,7 +46,7 @@ package AMPC is
    type Values is null record with
      Convention => C;
 
-   type Values_Ptr is access Values;
+   type Values_Ptr is access all Values;
 
    type Results (Success : Boolean) is
    record
@@ -68,7 +68,7 @@ package AMPC is
    type Parsers is null record with
      Convention => C;
 
-   type Parsers_Ptr is access Parsers with
+   type Parsers_Ptr is access all Parsers with
      Convention => C;
 
    function Parse (Input    : in String;
@@ -124,7 +124,7 @@ package AMPC is
    type ASTs is null record with
      Convention => C;
 
-   type AST_Ptr is access ASTs with
+   type AST_Ptr is access all ASTs with
      Convention => C;
 
    procedure Put (AST : in AST_Ptr) with
