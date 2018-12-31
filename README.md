@@ -24,7 +24,10 @@ FSF GNAT 7.3.0
 
 # Copyright
 
-Luke A. Guest
+Copyright (C) 2018-2019 by Luke A. Guest
+
+Other Copyrights held by Daniel Holden for his [MPC](./mpc) lib which is included in this project, see the
+[LICENSE](./mpc/LICENSE.md) file for more information.
 
 # Licence
 
