@@ -95,6 +95,14 @@ begin
 
             if Success then
                AMPC.Put (To_AST (Result.Output));
+
+               declare
+                  AST : AMPC.AST_Ptr := AMPC.To_AST (Result.Output);
+                  Children : AMPC.AST_Arrays := AMPC.Get_Children (AST.all);
+               begin
+                  null;
+               end;
+
                AMPC.Free (To_AST (Result.Output));
             else
                AMPC.Put (Result.Error);
