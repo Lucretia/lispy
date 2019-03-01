@@ -2,6 +2,7 @@ with Ada.Unchecked_Conversion;
 
 package body AMPC is
    use type C.int;
+   use type C.size_t;
 
    function Parse (Input    : in String;
                    Parser   : in Parsers_Ptr;
@@ -212,4 +213,24 @@ package body AMPC is
    begin
       return To_AST_Ptr (Value);
    end To_AST;
+
+   function Total_Nodes (AST : in AST_Ptr) return Natural is
+      Children : constant Natural := Natural (Number_Of_Children (AST.all));
+   begin
+      if Children = 0 then
+         return 1;
+      elsif Children >= 1 then
+         declare
+            Total : Natural := 1;
+         begin
+            for I in Natural'First .. Children - 1 loop
+               Total := Total + Total_Nodes (AST.Children (C.size_t (I)));
+            end loop;
+
+            return Total;
+         end;
+      end if;
+
+      return 0;
+   end Total_Nodes;
 end AMPC;

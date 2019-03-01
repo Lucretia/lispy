@@ -150,11 +150,12 @@ package AMPC is
    function To_AST (Value : in Values_Ptr) return AST_Ptr with
      Inline => True;
 
-   use type C.int;
-
    function Tag (Self : in ASTs) return String is (C.Strings.Value (Self.Tag));
    function Contents (Self : in ASTs) return String is (C.Strings.Value (Self.Contents));
-   function Number_Of_Children (Self : in ASTs) return C.size_t is (C.size_t (Self.Number_Of_Children - 1));
+
+   --  NOTE: Always substract 1 from the result in loops.
+   --    e.g. C.size_t'First .. Number_Of_Children - 1
+   function Number_Of_Children (Self : in ASTs) return C.size_t is (C.size_t (Self.Number_Of_Children));
 
    procedure Put (AST : in AST_Ptr) with
      Import        => True,
@@ -165,4 +166,6 @@ package AMPC is
      Import        => True,
      Convention    => C,
      External_Name => "mpc_ast_delete";
+
+   function Total_Nodes (AST : in AST_Ptr) return Natural;
 end AMPC;
