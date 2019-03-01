@@ -27,7 +27,7 @@ procedure Lispy is
    Error      : AMPC.Errors_Ptr  := AMPC.Language (
      AMPC.Default,
      "number   : /-?[0-9]+/ ;" &
-     "operator : '+' | '-' | '*' | '/' ;" &
+     "operator : '+' | '-' | '*' | '/' | '%' ;" &
      "expr     : <number> | '(' <operator> <expr>+ ')' ;" &
      "lispy    : /^/ <operator> <expr>+ /$/ ;",
      Number, Operator, Expression, Lispy);

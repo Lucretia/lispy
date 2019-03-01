@@ -47,6 +47,9 @@ package body Eval is
          when '/' =>
             return X / Y;
 
+         when '%' =>
+            return X rem Y;
+
          when others =>
             return 0;
       end case;
