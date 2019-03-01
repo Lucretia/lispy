@@ -102,15 +102,6 @@ begin
                   Result : constant Long_Integer := Eval.Evaluate (AST);
                begin
                   IO.Put_Line (Long_Integer'Image (Result));
-                  -- AMPC.Put (AST);
-
-                  -- IO.Put_Line ("Total nodes :=> " & Natural'Image (AMPC.Total_Nodes (AST)));
-                  -- IO.Put_Line ("Children    :=> " & C.int'Image (AST.Number_Of_Children));
-
-                  -- for I in C.size_t'First .. AMPC.Number_Of_Children (AST.all) - 1 loop
-                  --    IO.Put_Line ("  > " & AMPC.Tag (AST.Children (I).all) &
-                  --                 ":" & AMPC.Contents (AST.Children (I).all));
-                  -- end loop;
 
                   AMPC.Free (AST);
                end;
