@@ -150,8 +150,11 @@ package AMPC is
    function To_AST (Value : in Values_Ptr) return AST_Ptr with
      Inline => True;
 
-   function Get_Tag (Self : in ASTs) return String;
-   function Get_Contents (Self : in ASTs) return String;
+   use type C.int;
+
+   function Tag (Self : in ASTs) return String is (C.Strings.Value (Self.Tag));
+   function Contents (Self : in ASTs) return String is (C.Strings.Value (Self.Contents));
+   function Number_Of_Children (Self : in ASTs) return C.size_t is (C.size_t (Self.Number_Of_Children - 1));
 
    procedure Put (AST : in AST_Ptr) with
      Import        => True,

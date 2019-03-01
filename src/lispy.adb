@@ -54,8 +54,6 @@ procedure Lispy is
       raise Finished;
    end Handler;
 
-   function To_AST is new Ada.Unchecked_Conversion (Source => AMPC.Values_Ptr, Target => AMPC.AST_Ptr);
-
    function Check_Error (Error : in AMPC.Errors_Ptr) return Boolean is
    begin
       if Error /= null then
@@ -97,24 +95,20 @@ begin
             Success := AMPC.Parse (Input, Lispy, Result'Unrestricted_Access);
 
             if Success then
-               AMPC.Put (To_AST (Result.Output));
-
                declare
                   AST : AMPC.AST_Ptr := AMPC.To_AST (Result.Output);
-
-                  use type C.int;
-
                begin
+                  AMPC.Put (AST);
+
                   IO.Put_Line ("Children :=> " & C.int'Image (AST.Number_Of_Children));
 
-                  for I in C.size_t'First .. C.size_t (AST.Number_Of_Children - 1) loop
-                     if AST.Children (I).Contents /= C.Strings.Null_Ptr then
-                        IO.Put_Line ("  > " & C.Strings.Value (AST.Children (I).Contents));
-                     end if;
+                  for I in C.size_t'First .. AMPC.Number_Of_Children (AST.all) loop
+                     IO.Put_Line ("  > " & AMPC.Tag (AST.Children (I).all) &
+                                  ":" & AMPC.Contents (AST.Children (I).all));
                   end loop;
-               end;
 
-               AMPC.Free (To_AST (Result.Output));
+                  AMPC.Free (AST);
+               end;
             else
                AMPC.Put (Result.Error);
                AMPC.Free (Result.Error);

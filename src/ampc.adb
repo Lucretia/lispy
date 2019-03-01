@@ -212,14 +212,4 @@ package body AMPC is
    begin
       return To_AST_Ptr (Value);
    end To_AST;
-
-   function Get_Tag (Self : in ASTs) return String is
-   begin
-      return C.Strings.Value (Self.Tag);
-   end Get_Tag;
-
-   function Get_Contents (Self : in ASTs) return String is
-   begin
-      return C.Strings.Value (Self.Contents);
-   end Get_Contents;
 end AMPC;
