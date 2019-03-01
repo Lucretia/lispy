@@ -98,10 +98,10 @@ begin
 
             if Success then
                declare
-                  AST    : constant AMPC.AST_Ptr := AMPC.To_AST (Result.Output);
-                  Result : constant Long_Integer := Eval.Evaluate (AST);
+                  AST    : constant AMPC.AST_Ptr     := AMPC.To_AST (Result.Output);
+                  Result : constant Eval.Lisp_Values := Eval.Evaluate (AST);
                begin
-                  IO.Put_Line (Long_Integer'Image (Result));
+                  Eval.Put_Line (Result);
 
                   AMPC.Free (AST);
                end;
