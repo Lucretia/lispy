@@ -1,8 +1,7 @@
 with Interfaces.C.Strings;
-with Interfaces.C.Pointers;
+--  with Interfaces.C.Pointers;
 with System;
--- with System.Address_To_Access_Conversions;
-
+--  with System.Address_To_Access_Conversions;
 
 package AMPC is
    package C renames Interfaces.C;
@@ -124,39 +123,33 @@ package AMPC is
                       Parser_5 : in Parsers_Ptr) return Errors_Ptr;
 
    --  AST - mpc_ast_t
+   type ASTs;
+
+   type AST_Ptr is access all ASTs with
+     Convention => C;
+
+   --  Flat array of pointers without bounds.
+   type ASTs_Ptr_Array is array (C.size_t) of AST_Ptr with
+     Convention => C;
+
+   type ASTs_Ptr_Array_Ptr is access all ASTs_Ptr_Array with
+     Convention => C;
+
    type ASTs is
    record
       Tag                : C.Strings.chars_ptr;
       Contents           : C.Strings.chars_ptr;
       State              : States;
       Number_Of_Children : C.int;
-      Children           : System.Address;
+      Children           : ASTs_Ptr_Array_Ptr;
    end record with
      Convention => C;
 
    Null_AST : constant ASTs := (others => <>);
 
-   type AST_Ptr is access all ASTs with
-     Convention => C;
-
    function To_AST (Value : in Values_Ptr) return AST_Ptr with
      Inline => True;
 
-   type AST_Arrays is array (C.int range <>) of aliased ASTs with
-     Convention => C;
-
-   -- type AST_Array_Ptr is access all AST_Arrays with
-   --   Convention => C;
-
-   package AST_Array_Pointers is new Interfaces.C.Pointers (
-      Index              => C.int,
-      Element            => ASTs,
-      Element_Array      => AST_Arrays,
-      Default_Terminator => Null_AST);
-
-   -- package To_AST_Array_Ptr is new System.Address_To_Access_Conversions (Object => AST_Arrays);
-
-   function Get_Children (Self : in ASTs) return AST_Arrays;
    function Get_Tag (Self : in ASTs) return String;
    function Get_Contents (Self : in ASTs) return String;
 

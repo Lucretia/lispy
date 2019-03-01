@@ -1,7 +1,10 @@
 with Ada.Text_IO;
 with Ada.Unchecked_Conversion;
 --  with Ada.Characters.Latin_1;
+with Ada.Unchecked_Conversion;
 with Interfaces.C.Strings;
+--  with System;
+--  with System.Address_To_Access_Conversions;
 with Edit_Line;
 with AMPC;
 
@@ -98,9 +101,17 @@ begin
 
                declare
                   AST : AMPC.AST_Ptr := AMPC.To_AST (Result.Output);
-                  Children : AMPC.AST_Arrays := AMPC.Get_Children (AST.all);
+
+                  use type C.int;
+
                begin
-                  null;
+                  IO.Put_Line ("Children :=> " & C.int'Image (AST.Number_Of_Children));
+
+                  for I in C.size_t'First .. C.size_t (AST.Number_Of_Children - 1) loop
+                     if AST.Children (I).Contents /= C.Strings.Null_Ptr then
+                        IO.Put_Line ("  > " & C.Strings.Value (AST.Children (I).Contents));
+                     end if;
+                  end loop;
                end;
 
                AMPC.Free (To_AST (Result.Output));

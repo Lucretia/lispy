@@ -213,25 +213,6 @@ package body AMPC is
       return To_AST_Ptr (Value);
    end To_AST;
 
-   function Get_Children (Self : in ASTs) return AST_Arrays is
-      function To_AST_Array_Pointers is new Ada.Unchecked_Conversion
-        (Source => System.Address,
-         Target => AST_Array_Pointers.Pointer);
-
-      Child_Pointer : AST_Array_Pointers.Pointer := To_AST_Array_Pointers (Self.Children); --  Get pointer to the array.
-   begin
-      return Child_Array : AST_Arrays (1 .. Self.Number_Of_Children) do
-         for I in Child_Array'Range loop
-            Child_Array (I) := AST_Array_Pointers.Value (Ref => Child_Pointer, Length => 1)(0);
-
-            AST_Array_Pointers.Increment (Child_Pointer);
-         end loop;
-      end return; --  To_AST_Array_Ptr (Self.Children);
-      -- return AST_Array_Pointers.Value
-      --   (Ref    => To_AST_Array_Pointers (Self.Children),
-      --    Length => C.ptrdiff_t (Self.Number_Of_Children));
-   end Get_Children;
-
    function Get_Tag (Self : in ASTs) return String is
    begin
       return C.Strings.Value (Self.Tag);
