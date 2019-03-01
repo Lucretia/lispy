@@ -29,7 +29,6 @@ package body Eval is
 
          return X;
       end;
-      -- return 1;
    end Evaluate;
 
    function Evaluate_Operator (X, Y : in Long_Integer; Operator : in Character) return Long_Integer is
@@ -49,6 +48,9 @@ package body Eval is
 
          when '%' =>
             return X rem Y;
+
+         when '^' =>
+            return X ** Natural (Y);
 
          when others =>
             return 0;
