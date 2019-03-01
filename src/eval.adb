@@ -6,6 +6,7 @@ package body Eval is
    package C renames Interfaces.C;
 
    use type C.size_t;
+   use type C.int;
 
    function Evaluate (Tree : in AMPC.AST_Ptr) return Long_Integer is
    begin
@@ -19,6 +20,10 @@ package body Eval is
          X         :          Long_Integer := Evaluate (Tree.Children (2));
          Index     :          C.size_t     := 3;
       begin
+         if Tree.Number_Of_Children = 4 and Op = '-' then
+            X := -X;
+         end if;
+
          while Fixed.Index (Source => AMPC.Tag (Tree.Children (Index).all), Pattern => "expr") >= 1 loop
             X := Evaluate_Operator (X        => X,
                                     Operator => Op,
