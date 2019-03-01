@@ -1,12 +1,41 @@
 with Ada.Strings.Fixed;
+with Ada.Text_IO;
 with Interfaces.C;
 
 package body Eval is
+   package IO renames Ada.Text_IO;
    package Fixed renames Ada.Strings.Fixed;
    package C renames Interfaces.C;
 
    use type C.size_t;
    use type C.int;
+
+   procedure Put (Item : in Lisp_Values) is
+   begin
+      case Item.Which is
+         when Number =>
+            IO.Put (Fixed.Trim (Long_Integer'Image (Item.Number), Ada.Strings.Left));
+
+         when Error =>
+            case Item.Error is
+               when Divide_By_Zero =>
+                  IO.Put ("Error: Division by zero!");
+
+               when Bad_Operator =>
+                  IO.Put ("Error: Invalid operator!");
+
+               when Bad_Number =>
+                  IO.Put ("Error: Invalid number!");
+            end case;
+      end case;
+   end Put;
+
+   procedure Put_Line (Item : in Lisp_Values) is
+   begin
+      Put (Item);
+
+      IO.New_Line;
+   end Put_Line;
 
    function Evaluate (Tree : in AMPC.AST_Ptr) return Long_Integer is
    begin
