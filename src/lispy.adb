@@ -7,6 +7,7 @@ with Interfaces.C.Strings;
 --  with System.Address_To_Access_Conversions;
 with Edit_Line;
 with AMPC;
+with Eval;
 
 procedure Lispy is
    package IO renames Ada.Text_IO;
@@ -15,6 +16,7 @@ procedure Lispy is
 
    use type AMPC.Errors_Ptr;
    use type C.Strings.chars_ptr;
+   use type C.size_t;
 
    Version_Number : constant String := "0.0.1";
 
@@ -96,16 +98,19 @@ begin
 
             if Success then
                declare
-                  AST : AMPC.AST_Ptr := AMPC.To_AST (Result.Output);
+                  AST    : constant AMPC.AST_Ptr := AMPC.To_AST (Result.Output);
+                  Result : constant Long_Integer := Eval.Evaluate (AST);
                begin
-                  AMPC.Put (AST);
+                  IO.Put_Line (Long_Integer'Image (Result));
+                  -- AMPC.Put (AST);
 
-                  IO.Put_Line ("Children :=> " & C.int'Image (AST.Number_Of_Children));
+                  -- IO.Put_Line ("Total nodes :=> " & Natural'Image (AMPC.Total_Nodes (AST)));
+                  -- IO.Put_Line ("Children    :=> " & C.int'Image (AST.Number_Of_Children));
 
-                  for I in C.size_t'First .. AMPC.Number_Of_Children (AST.all) loop
-                     IO.Put_Line ("  > " & AMPC.Tag (AST.Children (I).all) &
-                                  ":" & AMPC.Contents (AST.Children (I).all));
-                  end loop;
+                  -- for I in C.size_t'First .. AMPC.Number_Of_Children (AST.all) - 1 loop
+                  --    IO.Put_Line ("  > " & AMPC.Tag (AST.Children (I).all) &
+                  --                 ":" & AMPC.Contents (AST.Children (I).all));
+                  -- end loop;
 
                   AMPC.Free (AST);
                end;
